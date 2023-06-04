@@ -15,12 +15,14 @@ export default defineConfig({
     }),
     Components({
       resolvers: [
+        //1.配置elementPlus采用sass样式配色系统
         ElementPlusResolver({importStyle: "sass"})
       ],
     }),
   ],
   resolve: {
     alias: {
+      
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
