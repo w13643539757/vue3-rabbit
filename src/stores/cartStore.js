@@ -9,20 +9,25 @@ export const useCartStore = defineStore('cart', () => {
         //没有添加过 直接push
         //思路：通过匹配传递过来的商品对象中skuId能不能再cailist中找到，找到了就是添加过
         const item = cartList.value.find((item) => goods.skuId === item.skuId)
-        if(item){
+        if (item) {
             //找到了
             item.count++
-        }else{
+        } else {
             //没找到
             cartList.value.push(goods)
         }
     }
+    const delCart = (skuId) => {
+        const idx = cartList.value.findIndex((item) => skuId === item.skuId)
+        cartList.value.splice(idx, 1)
+    }
     return {
         cartList,
-        addCart
+        addCart,
+        delCart
     }
-},{
+}, {
     //持久化配置 存入ls
     persist: true
-    
-  })
+
+})
