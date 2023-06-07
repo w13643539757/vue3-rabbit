@@ -1,6 +1,12 @@
 <script setup>
-import { useCartStore } from '@/stores/cartStore';
-const cartStore = useCartStore()
+import { useCartStore } from "@/stores/cartStore";
+const cartStore = useCartStore();
+////单选回调
+const singleCheck = (i, selected) => {
+  //store carList数组 无法知道要修改谁的选中状态
+  //除了selected补充一个用来筛选的参数-skuId
+  cartStore.singleCheck(i.skuId, selected);
+};
 </script>
 
 <template>
@@ -11,7 +17,7 @@ const cartStore = useCartStore()
           <thead>
             <tr>
               <th width="120">
-                <el-checkbox/>
+                <el-checkbox />
               </th>
               <th width="400">商品信息</th>
               <th width="220">单价</th>
@@ -23,12 +29,18 @@ const cartStore = useCartStore()
           <!-- 商品列表 -->
           <tbody>
             <tr v-for="i in cartStore.cartList" :key="i.id">
-              <td>
-                <el-checkbox />
-              </td>
+                <td>
+            <!-- 单选框 -->
+            <el-checkbox
+              :model-value="i.selected"
+              @change="(selected) => singleCheck(i, selected)"
+            />
+          </td>
               <td>
                 <div class="goods">
-                  <RouterLink to="/"><img :src="i.picture" alt="" /></RouterLink>
+                  <RouterLink to="/"
+                    ><img :src="i.picture" alt=""
+                  /></RouterLink>
                   <div>
                     <p class="name ellipsis">
                       {{ i.name }}
@@ -47,7 +59,12 @@ const cartStore = useCartStore()
               </td>
               <td class="tc">
                 <p>
-                  <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="delCart(i)">
+                  <el-popconfirm
+                    title="确认删除吗?"
+                    confirm-button-text="确认"
+                    cancel-button-text="取消"
+                    @confirm="delCart(i)"
+                  >
                     <template #reference>
                       <a href="javascript:;">删除</a>
                     </template>
@@ -65,7 +82,7 @@ const cartStore = useCartStore()
               </td>
             </tr>
           </tbody>
-
+         
         </table>
       </div>
       <!-- 操作栏 -->
@@ -75,7 +92,7 @@ const cartStore = useCartStore()
           <span class="red">¥ 200.00 </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" >下单结算</el-button>
+          <el-button size="large" type="primary">下单结算</el-button>
         </div>
       </div>
     </div>
@@ -160,7 +177,7 @@ const cartStore = useCartStore()
       height: 100px;
     }
 
-    >div {
+    > div {
       width: 280px;
       font-size: 16px;
       padding-left: 10px;
@@ -205,6 +222,5 @@ const cartStore = useCartStore()
     font-weight: normal;
     line-height: 50px;
   }
-
 }
 </style>
