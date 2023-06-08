@@ -1,27 +1,43 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { useUserStore } from './user'
+import { insertCartAPI, findNewCartListAPI } from '@/apis/cart'
 export const useCartStore = defineStore('cart', () => {
+    const userStore = useUserStore()
+    const isLogin = computed(() => userStore.userInfo.token)
     //1.定义state-cart list
     const cartList = ref([])
     //2.定义action-add Cart
-    const addCart = (goods) => {
-        //已添加过 count + 1
-        //没有添加过 直接push
-        //思路：通过匹配传递过来的商品对象中skuId能不能再cailist中找到，找到了就是添加过
-        const item = cartList.value.find((item) => goods.skuId === item.skuId)
-        if (item) {
-            //找到了
-            item.count++
+    const addCart = async (goods) => {
+        const { skuId, count } = goods
+        //登录
+        if (isLogin.value) {
+            await insertCartAPI({ skuId, count })
+            const res = await findNewCartListAPI()
+            cartList.value = res.result
         } else {
-            //没找到
-            cartList.value.push(goods)
+            //未登录
+            //已添加过 count + 1
+            //没有添加过 直接push
+            //思路：通过匹配传递过来的商品对象中skuId能不能再cailist中找到，找到了就是添加过
+            const item = cartList.value.find((item) => goods.skuId === item.skuId)
+            if (item) {
+                //找到了
+                item.count++
+            } else {
+                //没找到
+                cartList.value.push(goods)
+            }
         }
     }
+
     const delCart = (skuId) => {
         const idx = cartList.value.findIndex((item) => skuId === item.skuId)
         cartList.value.splice(idx, 1)
 
     }
+
+
     //计算属性
     //1.总的数量 所有项的count之和
     const allCount = computed(() => cartList.value.reduce((a, c) => a + c.count, 0))
@@ -40,9 +56,9 @@ export const useCartStore = defineStore('cart', () => {
         cartList.value.forEach(item => item.selected = selected)
     }
     //1.已选商品数量
-    const selectedCount = computed(()=>cartList.value.filter((item)=>item.selected).reduce((a, c) => a + c.count, 0))
+    const selectedCount = computed(() => cartList.value.filter((item) => item.selected).reduce((a, c) => a + c.count, 0))
     //2.已选商品总价
-    const selectedPrice = computed(()=>cartList.value.filter((item)=>item.selected).reduce((a, c) => a + c.count*c.price, 0))
+    const selectedPrice = computed(() => cartList.value.filter((item) => item.selected).reduce((a, c) => a + c.count * c.price, 0))
 
     return {
         cartList,
