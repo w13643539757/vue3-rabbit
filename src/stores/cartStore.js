@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
-import { insertCartAPI, findNewCartListAPI, delCartListAPI } from '@/apis/cart'
+import { insertCartAPI, findNewCartListAPI, delCartAPI } from '@/apis/cart'
 export const useCartStore = defineStore('cart', () => {
     //更新购物车列表
     const updateCartList = async () => {
@@ -37,7 +37,7 @@ export const useCartStore = defineStore('cart', () => {
     //删除功能
     const delCart = async (skuId) => {
         if (isLogin.value) {
-            await delCartListAPI()
+            await delCartAPI([skuId])
             updateCartList()
         } else {
             const idx = cartList.value.findIndex((item) => skuId === item.skuId)
@@ -45,7 +45,10 @@ export const useCartStore = defineStore('cart', () => {
         }
     }
 
-
+    //退出登录，清空购物车列表
+    const clearCart = () => {
+        cartList.value = []
+    }
 
 
     //计算属性
@@ -77,6 +80,7 @@ export const useCartStore = defineStore('cart', () => {
         isAll,
         selectedCount,
         selectedPrice,
+        clearCart,
         allCheck,
         addCart,
         delCart,

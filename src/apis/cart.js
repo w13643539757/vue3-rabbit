@@ -22,7 +22,7 @@ export const findNewCartListAPI = () => {
 } 
 
 //封装删除接口
-export const delCartListAPI = (ids) => {
+export const delCartAPI = (ids) => {
     return request({
         url: '/member/cart',
         method: 'DELETE',
