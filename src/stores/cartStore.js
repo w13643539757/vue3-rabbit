@@ -84,7 +84,8 @@ export const useCartStore = defineStore('cart', () => {
         allCheck,
         addCart,
         delCart,
-        singleCheck
+        singleCheck,
+        updateCartList
     }
 }, {
     //持久化配置 存入ls

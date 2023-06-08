@@ -2,15 +2,14 @@
 import { ref } from "vue";
 
 import { ElMessage } from "element-plus";
-import "element-plus/theme-chalk/el-message.css";
 import { useRouter } from "vue-router";
-import {useUserStore} from '@/stores/userStore'
-const userStore = useUserStore()
+import { useUserStore } from "@/stores/userStore";
+const userStore = useUserStore();
 //1.准备表单对象
 const form = ref({
   account: "",
   password: "",
-  agree: true
+  agree: true,
 });
 //2.准备规则对象
 const rules = {
