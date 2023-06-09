@@ -60,10 +60,10 @@ const router = createRouter({
           component: Member,
           children:[
             {
-              path: 'userinfo',
+              path: 'user',
               component: UserInfo
             },{
-              path: 'userorder',
+              path: 'order',
               component: UserOrder
             }
           ]
