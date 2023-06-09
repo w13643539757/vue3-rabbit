@@ -1,14 +1,20 @@
 <script setup>
-import {getOrderAPI} from '@/apis/pay'
-import {onMounted, ref} from 'vue'
-import {useRoute} from 'vue-router'
-const route = useRoute()
-const payInfo = ref({})
-const getPayInfo =async () =>{
-   const res = await getOrderAPI(route.query.id)
-   payInfo.value = res.result
-}
-onMounted(()=>getPayInfo())
+import { getOrderAPI } from "@/apis/pay";
+import { onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const payInfo = ref({});
+const getPayInfo = async () => {
+  const res = await getOrderAPI(route.query.id);
+  payInfo.value = res.result;
+};
+onMounted(() => getPayInfo());
+// 支付地址
+const baseURL = 'http://pcapi-xiaotuxian-front-devtest.itheima.net/'
+const backURL = 'http://127.0.0.1:5173/paycallback'
+const redirectUrl = encodeURIComponent(backURL)
+const payUrl = `${baseURL}pay/aliPay?orderId=${route.query.id}&redirect=${redirectUrl}`
+
 </script>
 
 
@@ -54,7 +60,6 @@ onMounted(()=>getPayInfo())
 }
 
 .pay-info {
-
   background: #fff;
   display: flex;
   align-items: center;
@@ -130,11 +135,13 @@ onMounted(()=>getPayInfo())
     }
 
     &.alipay {
-      background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7b6b02396368c9314528c0bbd85a2e06.png) no-repeat center / contain;
+      background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/7b6b02396368c9314528c0bbd85a2e06.png)
+        no-repeat center / contain;
     }
 
     &.wx {
-      background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c66f98cff8649bd5ba722c2e8067c6ca.jpg) no-repeat center / contain;
+      background: url(https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/c66f98cff8649bd5ba722c2e8067c6ca.jpg)
+        no-repeat center / contain;
     }
   }
 }
