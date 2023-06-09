@@ -31,7 +31,7 @@ const confirm = () => {
   activeAddress.value = {};
 };
 
-//创建订单
+//提交订单
 const createOrder = async () => {
   const res = await createOrderAPI({
     deliveryTimeType: 1,
